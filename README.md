@@ -118,3 +118,78 @@ UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
 ```objective-c
 collectionView.alwaysBounceVertical = YES;
 ```
+
+### 6. 判断`UITableView`的滑动方向，向下滑动就隐藏`UITabBar`，向上滑动就显示`UITabBar`
+
+```objective-c
+// 先在上面定义一个CGFloat类型的_oldPanOffsetY用于记录上一次滑动的y
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    if (scrollView == self.tableView) {
+        _oldPanOffsetY = [scrollView.panGestureRecognizer translationInView:scrollView.superview].y;
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    _oldPanOffsetY = 0;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentSize.height <= CGRectGetHeight(scrollView.bounds)-50) {
+        [self hideTabBar:NO];
+        return;
+    }else if (scrollView.panGestureRecognizer.state == UIGestureRecognizerStateChanged){
+        CGFloat nowPanOffsetY = [scrollView.panGestureRecognizer translationInView:scrollView.superview].y;
+        CGFloat diffPanOffsetY = nowPanOffsetY - _oldPanOffsetY;
+        CGFloat contentOffsetY = scrollView.contentOffset.y;
+        if (ABS(diffPanOffsetY) > 50.f) {
+            [self hideTabBar:(diffPanOffsetY < 0.f && contentOffsetY > 0)];
+            _oldPanOffsetY = nowPanOffsetY;
+        }
+    }
+}
+
+- (void)hideTabBar:(BOOL)hide {
+    if (hide) {
+        [self setTabBarHidden:YES animated:YES];
+    } else {
+        [self setTabBarHidden:NO animated:YES];
+    }
+}
+
+- (void)setTabBarHidden:(BOOL)hidden animated:(BOOL)animated {
+
+    void (^block)() = ^{
+        CGSize viewSize = self.tabBarController.view.bounds.size;
+        CGFloat tabBarStartingY = viewSize.height;
+        CGFloat contentViewHeight = viewSize.height;
+        CGFloat tabBarHeight = CGRectGetHeight([[self.tabBarController tabBar] frame]);
+        if (!tabBarHeight) {
+            tabBarHeight = 49;
+        }
+
+        if (!hidden) {
+            tabBarStartingY = viewSize.height - tabBarHeight;
+            if (![[self.tabBarController tabBar] isTranslucent]) {
+                contentViewHeight -= 49;
+            }
+            [[self.tabBarController tabBar] setHidden:NO];
+        }
+
+        [[self.tabBarController tabBar] setFrame:CGRectMake(0, tabBarStartingY, viewSize.width, tabBarHeight)];
+    };
+
+    void (^completion)(BOOL) = ^(BOOL finished){
+        if (hidden) {
+            [[self.tabBarController tabBar] setHidden:YES];
+        }
+    };
+
+    if (animated) {
+        [UIView animateWithDuration:0.10 animations:block completion:completion];
+    } else {
+        block();
+        completion(YES);
+    }
+}
+```
