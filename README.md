@@ -8,6 +8,7 @@
 3. 让`Status Bar`上显示一个旋转的`ActivityIndicator`
 4. `[NSDate date]`和实际时间相差8小时
 5. `UICollectionView`中加入`UIRefreshControl`
+6. 判断`UITableView`的滑动方向，向下滑动就隐藏`UITabBar`，向上滑动就显示`UITabBar`
 
 ### 1. 设置UITextView的placeHolder
 
