@@ -9,6 +9,7 @@
 4. `[NSDate date]`和实际时间相差8小时
 5. `UICollectionView`中加入`UIRefreshControl`
 6. 判断`UITableView`的滑动方向，向下滑动就隐藏`UITabBar`，向上滑动就显示`UITabBar`
+7. 把`textView`文字长按出现的选项从英文改为中文
 
 ### 1. 设置UITextView的placeHolder
 
@@ -194,3 +195,9 @@ collectionView.alwaysBounceVertical = YES;
     }
 }
 ```
+
+### 7. 把`textView`文字长按出现的选项从英文改为中文
+
+> 在info.plist中加上一个Localized的Array，然后把Array中的item0改为Chinese(Simplified)就可以实现
+
+![示意图](http://7xr0k3.com1.z0.glb.clouddn.com/iOS-Develop-Tips/Snip20160419_5.png)
