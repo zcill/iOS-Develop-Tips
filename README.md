@@ -198,6 +198,6 @@ collectionView.alwaysBounceVertical = YES;
 
 ### 7. 把`textView`文字长按出现的选项从英文改为中文
 
-> 在info.plist中加上一个Localized的Array，然后把Array中的item0改为Chinese(Simplified)就可以实现
+> 在info.plist中加上一个Localization的Array，然后把Array中的item0改为Chinese(Simplified)就可以实现
 
 ![示意图](http://7xr0k3.com1.z0.glb.clouddn.com/iOS-Develop-Tips/Snip20160419_5.png)
