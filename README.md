@@ -205,7 +205,7 @@ collectionView.alwaysBounceVertical = YES;
 
 ### 8. 开启`finder`显示隐藏文件
 
-```objective-c
+```shell
 
 $ defaults write com.apple.finder AppleShowAllFiles -bool true     // 开启查看隐藏文件
 
